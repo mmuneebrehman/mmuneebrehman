@@ -1,9 +1,7 @@
 {
-  "homepage": "https://mmuneebrehman.github.io/mmuneebrehman/",
-  "scripts": {
-    "deploy": "gh-pages -d portfolio"
-  },
-  "dependencies": {
-    "gh-pages": "^6.3.0"
-  }
+  "name": "muneeb-portfolio",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Personal portfolio site — served via GitHub Pages from the main branch root.",
+  "homepage": "https://mmuneebrehman.github.io/mmuneebrehman/"
 }
