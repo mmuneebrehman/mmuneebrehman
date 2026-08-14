@@ -331,6 +331,18 @@ section{padding:clamp(70px,10vh,120px) 0;position:relative}
 .proj .tags span{font-size:11.5px;font-family:var(--font-mono);color:var(--accent-2);padding:4px 9px;border-radius:7px;background:color-mix(in srgb,var(--accent-2) 12%,transparent)}
 .proj .award{position:absolute;top:20px;right:20px;font-size:11px;font-family:var(--font-mono);color:#ffcf5c;background:color-mix(in srgb,#ffcf5c 14%,transparent);padding:4px 9px;border-radius:7px}
 
+/* featured live-demo project */
+.proj.feat{grid-column:1/-1;background:linear-gradient(120deg,color-mix(in srgb,var(--accent) 12%,var(--surface)),var(--surface))}
+.proj.feat::before{opacity:.6}
+.proj .live-badge{display:inline-flex;align-items:center;gap:7px;font-family:var(--font-mono);font-size:11px;color:var(--accent-2);background:color-mix(in srgb,var(--accent-2) 12%,transparent);border:1px solid color-mix(in srgb,var(--accent-2) 30%,transparent);padding:4px 10px;border-radius:999px}
+.proj .live-badge .d{width:7px;height:7px;border-radius:50%;background:var(--ok,#2ee6a6);box-shadow:0 0 10px #2ee6a6;animation:pulse 2s infinite}
+.proj .actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:18px}
+.proj .actions a{display:inline-flex;align-items:center;gap:7px;font-size:13.5px;font-weight:600;padding:9px 16px;border-radius:10px;transition:.2s}
+.proj .actions a.try{background:var(--accent);color:#fff;box-shadow:0 8px 24px var(--glow)}
+.proj .actions a.try:hover{transform:translateY(-2px);text-decoration:none}
+.proj .actions a.code{border:1px solid var(--border-strong);color:var(--text)}
+.proj .actions a.code:hover{border-color:var(--accent);text-decoration:none}
+
 /* ---------- education + certs ---------- */
 .edu-grid{display:grid;grid-template-columns:1fr 1fr;gap:20px}
 @media(max-width:760px){.edu-grid{grid-template-columns:1fr}}
@@ -696,6 +708,19 @@ footer{border-top:1px solid var(--border);padding:30px 0;text-align:center;color
     <div class="eyebrow">04 — Selected Work</div>
     <h2 class="sec-title reveal">Things I've built.</h2>
     <div class="proj-grid">
+
+      <div class="proj feat reveal">
+        <div class="live-badge"><span class="d"></span>Live demo · runs in your browser</div>
+        <h3 style="margin-top:14px">Ask Your Docs — Retrieval-Augmented Generation</h3>
+        <div class="meta">Personal project · transformers.js · MiniLM embeddings</div>
+        <p>A full RAG pipeline running 100% client-side: it embeds your question, runs vector search over indexed passages by cosine similarity, and composes a grounded answer with inline citations — no backend, no API key. Preloaded with a knowledge base about me, so you can ask it about my experience directly.</p>
+        <div class="tags"><span>transformers.js</span><span>Vector Search</span><span>Embeddings</span><span>TypeScript</span><span>Zero-backend</span></div>
+        <div class="actions">
+          <a class="try" href="https://mmuneebrehman.github.io/ask-your-docs/" target="_blank" rel="noopener">Try it live ↗</a>
+          <a class="code" href="https://github.com/mmuneebrehman/ask-your-docs" target="_blank" rel="noopener">◇ View code</a>
+        </div>
+      </div>
+
       <div class="proj reveal">
         <div class="idx">01</div>
         <h3>Cinemataztic Platform Modules</h3>
