@@ -94,6 +94,42 @@ img{max-width:100%}
   background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
 }
 
+/* ---------- neural network canvas ---------- */
+#neural{position:fixed;inset:0;z-index:-1;pointer-events:none;opacity:.5}
+
+/* ---------- scroll progress ---------- */
+.progress{
+  position:fixed;top:0;left:0;height:3px;width:0;z-index:200;
+  background:linear-gradient(90deg,var(--accent),var(--accent-2),var(--accent-3));
+  box-shadow:0 0 14px var(--glow);
+}
+
+/* ---------- AI / RAG pipeline panel ---------- */
+.ai-panel{
+  grid-column:1/-1;margin-top:34px;border:1px solid var(--border);border-radius:18px;
+  background:linear-gradient(180deg,var(--surface-2),transparent);padding:24px;overflow:hidden;position:relative;
+}
+.ai-panel::after{
+  content:"";position:absolute;inset:0;border-radius:18px;padding:1px;pointer-events:none;
+  background:linear-gradient(120deg,color-mix(in srgb,var(--accent) 40%,transparent),transparent 60%);
+  -webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);
+  -webkit-mask-composite:xor;mask-composite:exclude;
+}
+.ai-panel h4{font-family:var(--font-mono);font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--accent-2);margin-bottom:6px;display:flex;align-items:center;gap:9px}
+.ai-panel .sub{font-size:13px;color:var(--text-dim);margin-bottom:18px}
+.pipe{width:100%;height:auto;display:block;overflow:visible}
+.pipe .conn{stroke:var(--border-strong);stroke-width:2;fill:none;stroke-dasharray:5 7;animation:flow 1s linear infinite}
+@keyframes flow{to{stroke-dashoffset:-24}}
+.pipe .ncirc{fill:var(--bg-2);stroke:var(--accent);stroke-width:2}
+.pipe .npulse{fill:none;stroke:var(--accent);stroke-width:2;opacity:0;transform-origin:center;transform-box:fill-box}
+.pipe .lbl{font-family:var(--font-mono);font-size:12px;fill:var(--text);text-anchor:middle;font-weight:600}
+.pipe .ico{font-size:20px;text-anchor:middle;dominant-baseline:central}
+.pipe .spark{fill:var(--accent-2)}
+@media(prefers-reduced-motion:reduce){
+  .pipe .conn,.pipe .spark-dot{animation:none}
+  #neural{display:none}
+}
+
 /* ---------- cursor glow ---------- */
 .cursor-glow{
   position:fixed;top:0;left:0;width:460px;height:460px;border-radius:50%;
@@ -336,8 +372,10 @@ footer{border-top:1px solid var(--border);padding:30px 0;text-align:center;color
 </style>
 </head>
 <body>
+<div class="progress" id="progress"></div>
 <div class="bg-aura"></div>
 <div class="bg-grid"></div>
+<canvas id="neural"></canvas>
 <div class="noise"></div>
 <div class="cursor-glow" id="cglow"></div>
 
@@ -447,6 +485,41 @@ footer{border-top:1px solid var(--border);padding:30px 0;text-align:center;color
           <h4>Data &amp; AI</h4>
           <div class="chips"><span class="chip">SQL Server</span><span class="chip">PostgreSQL</span><span class="chip">Firebase</span><span class="chip">Kafka</span><span class="chip">TensorFlow</span><span class="chip">Keras</span><span class="chip">RAG / LLM</span></div>
         </div>
+      </div>
+
+      <div class="ai-panel reveal">
+        <h4><span class="spark">✦</span> Retrieval-Augmented Generation, end to end</h4>
+        <div class="sub">How I ground LLM answers in real data — the pipeline I build with vector embeddings and semantic search.</div>
+        <svg class="pipe" viewBox="0 0 760 150" role="img" aria-label="RAG pipeline: Query, Embed, Vector Search, Retrieve, LLM Answer">
+          <!-- connectors -->
+          <path class="conn" d="M94 60 H206"/>
+          <path class="conn" d="M254 60 H366"/>
+          <path class="conn" d="M414 60 H526"/>
+          <path class="conn" d="M574 60 H686"/>
+          <!-- traveling spark -->
+          <circle class="spark spark-dot" r="4">
+            <animateMotion dur="4s" repeatCount="indefinite"
+              path="M70 60 H206 M254 60 H366 M414 60 H526 M574 60 H710"/>
+          </circle>
+          <!-- nodes -->
+          <g>
+            <circle class="npulse" cx="70" cy="60" r="24"><animate attributeName="r" values="24;34" dur="2.4s" repeatCount="indefinite"/><animate attributeName="opacity" values=".5;0" dur="2.4s" repeatCount="indefinite"/></circle>
+            <circle class="ncirc" cx="70" cy="60" r="24"/><text class="ico" x="70" y="61">🔎</text><text class="lbl" x="70" y="108">Query</text>
+          </g>
+          <g>
+            <circle class="ncirc" cx="230" cy="60" r="24"/><text class="ico" x="230" y="61">▦</text><text class="lbl" x="230" y="108">Embed</text>
+          </g>
+          <g>
+            <circle class="ncirc" cx="390" cy="60" r="24"/><text class="ico" x="390" y="61">🗄️</text><text class="lbl" x="390" y="108">Vector Search</text>
+          </g>
+          <g>
+            <circle class="ncirc" cx="550" cy="60" r="24"/><text class="ico" x="550" y="61">⇅</text><text class="lbl" x="550" y="108">Retrieve</text>
+          </g>
+          <g>
+            <circle class="npulse" cx="710" cy="60" r="24"><animate attributeName="r" values="24;34" dur="2.4s" begin="1.2s" repeatCount="indefinite"/><animate attributeName="opacity" values=".5;0" dur="2.4s" begin="1.2s" repeatCount="indefinite"/></circle>
+            <circle class="ncirc" cx="710" cy="60" r="24"/><text class="ico" x="710" y="61">✨</text><text class="lbl" x="710" y="108">LLM Answer</text>
+          </g>
+        </svg>
       </div>
     </div>
   </section>
@@ -665,6 +738,65 @@ footer{border-top:1px solid var(--border);padding:30px 0;text-align:center;color
   // ---- duplicate marquee for seamless loop ----
   var mq=document.getElementById('mq');
   if(mq)mq.innerHTML+=mq.innerHTML;
+
+  var reduced=matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var fine=matchMedia('(pointer:fine)').matches;
+
+  // ---- scroll progress bar ----
+  var pr=document.getElementById('progress');
+  function onScroll(){
+    var h=document.documentElement,max=h.scrollHeight-h.clientHeight;
+    pr.style.width=(max>0?(h.scrollTop/max)*100:0)+'%';
+  }
+  window.addEventListener('scroll',onScroll,{passive:true});onScroll();
+
+  // ---- 3D tilt on project cards ----
+  if(fine&&!reduced){
+    document.querySelectorAll('.proj').forEach(function(card){
+      card.addEventListener('mousemove',function(e){
+        var r=card.getBoundingClientRect();
+        var px=(e.clientX-r.left)/r.width-.5,py=(e.clientY-r.top)/r.height-.5;
+        card.style.transition='transform .06s linear';
+        card.style.transform='perspective(760px) rotateX('+(-py*6)+'deg) rotateY('+(px*9)+'deg) translateY(-4px)';
+      });
+      card.addEventListener('mouseleave',function(){card.style.transition='';card.style.transform='';});
+    });
+  }
+
+  // ---- neural network constellation ----
+  var cv=document.getElementById('neural');
+  if(cv&&!reduced){
+    var ctx=cv.getContext('2d'),W,H,pts=[],dpr=Math.min(window.devicePixelRatio||1,2),mouse={x:-9999,y:-9999};
+    function accentRGB(){
+      var c=getComputedStyle(document.documentElement).getPropertyValue('--accent').trim()||'#7c5cff';
+      c=c.replace('#','');if(c.length===3)c=c.split('').map(function(x){return x+x}).join('');
+      var n=parseInt(c,16);return [(n>>16)&255,(n>>8)&255,n&255];
+    }
+    function resize(){
+      W=cv.width=innerWidth*dpr;H=cv.height=innerHeight*dpr;
+      cv.style.width=innerWidth+'px';cv.style.height=innerHeight+'px';
+      var count=Math.min(80,Math.floor(innerWidth/18));pts=[];
+      for(var i=0;i<count;i++)pts.push({x:Math.random()*W,y:Math.random()*H,vx:(Math.random()-.5)*.3*dpr,vy:(Math.random()-.5)*.3*dpr});
+    }
+    resize();window.addEventListener('resize',resize);
+    window.addEventListener('mousemove',function(e){mouse.x=e.clientX*dpr;mouse.y=e.clientY*dpr;},{passive:true});
+    function draw(){
+      ctx.clearRect(0,0,W,H);var rgb=accentRGB(),maxD=150*dpr,pre='rgba('+rgb[0]+','+rgb[1]+','+rgb[2]+',';
+      for(var i=0;i<pts.length;i++){
+        var p=pts[i],dxm=p.x-mouse.x,dym=p.y-mouse.y,dm=Math.hypot(dxm,dym);
+        if(dm<130*dpr&&dm>0){p.x+=dxm/dm*.7;p.y+=dym/dm*.7;}
+        p.x+=p.vx;p.y+=p.vy;
+        if(p.x<0||p.x>W)p.vx*=-1;if(p.y<0||p.y>H)p.vy*=-1;
+        for(var j=i+1;j<pts.length;j++){
+          var q=pts[j],d=Math.hypot(p.x-q.x,p.y-q.y);
+          if(d<maxD){ctx.strokeStyle=pre+(0.16*(1-d/maxD))+')';ctx.lineWidth=dpr;ctx.beginPath();ctx.moveTo(p.x,p.y);ctx.lineTo(q.x,q.y);ctx.stroke();}
+        }
+        ctx.fillStyle=pre+'0.65)';ctx.beginPath();ctx.arc(p.x,p.y,1.6*dpr,0,6.2832);ctx.fill();
+      }
+      requestAnimationFrame(draw);
+    }
+    draw();
+  }
 })();
 </script>
 </body>
